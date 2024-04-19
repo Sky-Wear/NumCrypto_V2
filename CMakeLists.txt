@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.26)
+project(NumCrypto)
+set(CMAKE_CXX_STANDARD 17)
+find_package(CURL REQUIRED)
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+add_executable(NumCrypto main.cpp)
+target_link_libraries(NumCrypto PRIVATE CURL::libcurl)
