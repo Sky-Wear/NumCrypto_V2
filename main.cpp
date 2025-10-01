@@ -1,8 +1,6 @@
 #include <iostream>
 #include <string>
 #include <random>
-#include <curl/curl.h>
-#include <curl/easy.h>
 #include <algorithm>
 std::string padStart(const std::string &str, size_t num, char ch) {
     std::string result = str;
@@ -136,7 +134,6 @@ std::string encode(const std::string &str, int type) {
         return "";
     } else {
         std::string result = "";
-        // 使用随机数生成 keyId
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> dis(0, 6);
@@ -184,48 +181,7 @@ std::string decode(const std::string &str, int type) {
 
 int main() {
     SetConsoleOutputCP(CP_UTF8);
-    std::cout << "加载中..." << std::endl;
-    CURLcode res = curl_global_init(CURL_GLOBAL_ALL);
-    if (CURLE_OK != res) {
-        std::cout << "加载失败！" << std::endl;
-        system("pause");
-        return 1;
-    }
-
-    CURL *pCurl = nullptr;
-    pCurl = curl_easy_init();
-
-    if (nullptr == pCurl) {
-        std::cout << "加载失败！" << std::endl;
-        system("pause");
-        return -1;
-    }
-
-    std::string url = "https://gitee.com/cmc-_-Ark/ctl/raw/master/NumCrypto.Enable.bool";
-
-    curl_easy_setopt(pCurl, CURLOPT_TIMEOUT, 3L);
-    curl_easy_setopt(pCurl, CURLOPT_CONNECTTIMEOUT, 10L);
-    curl_easy_setopt(pCurl, CURLOPT_FOLLOWLOCATION, 1L);
-    curl_easy_setopt(pCurl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-
-    MemoryStruct oDataChunk;
-    curl_easy_setopt(pCurl, CURLOPT_WRITEDATA, &oDataChunk);
-
-    curl_easy_setopt(pCurl, CURLOPT_NOSIGNAL, 1L);
-    curl_easy_setopt(pCurl, CURLOPT_URL, url.c_str());
-
-    curl_slist *pList = nullptr;
-    pList = curl_slist_append(pList, "Accept-Encoding:gzip");
-    pList = curl_slist_append(pList, "Accept-Language:zh-CN,zh;q=0.8");
-    pList = curl_slist_append(pList, "Connection:keep-alive");
-    curl_easy_setopt(pCurl, CURLOPT_HTTPHEADER, pList);
-
-    res = curl_easy_perform(pCurl);
-
-    long res_code = 0;
-    res = curl_easy_getinfo(pCurl, CURLINFO_RESPONSE_CODE, &res_code);
-    //if(true){
-    if ((res == CURLE_OK) && (res_code == 200 || res_code == 201)) {
+    if(true){
 
         int mode;
         middle("NumCrypto 2.0", '=');
@@ -268,8 +224,5 @@ int main() {
         std::cout << "加载失败！";
         system("pause");
     }
-    curl_slist_free_all(pList);
-    curl_easy_cleanup(pCurl);
-    curl_global_cleanup();
     return 0;
 }
